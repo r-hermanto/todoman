@@ -6,6 +6,13 @@
     <div>Priority: {{.Priority}}</div>
     <div>Status: {{.Status}}</div>
 
+    <select name="status" autocomplete="off" hx-post="/task/status/{{.ID}}" hx-target="#task-{{.ID}}" hx-swap="delete">
+        <option value="BACKLOG" {{ if eq .Status "BACKLOG" }} selected="selected" {{ end}}>Backlog</option>
+        <option value="TODO" {{ if eq .Status "TODO" }} selected="selected" {{ end}}>Todo</option>
+        <option value="DOING" {{ if eq .Status "DOING" }} selected="selected" {{ end}}>Doing</option>
+        <option value="DONE" {{ if eq .Status "DONE" }} selected="selected" {{ end}}>Done</option>
+    </select>
+
     <button type="button" hx-delete="/task/delete/{{.ID}}" hx-target="#task-{{.ID}}" hx-swap="delete">Delete</button>
 </div>
 

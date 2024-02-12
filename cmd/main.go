@@ -87,6 +87,36 @@ func main() {
 		taskAddTmpl.Execute(w, task)
 	})
 
+	r.Post("/task/status/{id}", func(w http.ResponseWriter, r *http.Request) {
+		taskIDStr := chi.URLParam(r, "id")
+		id, err := strconv.Atoi(taskIDStr)
+
+		if err != nil {
+			panic(err)
+		}
+
+		idx := slices.IndexFunc(taskList, func(t Task) bool {
+			return t.ID == id
+		})
+
+		if idx == -1 {
+			return
+		}
+
+		err = r.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
+		status := TaskStatus(r.FormValue("status"))
+
+		task := taskList[idx]
+		task.Status = status
+		taskList[idx] = task
+
+		taskAddTmpl.Execute(w, task)
+	})
+
 	r.Delete("/task/delete/{id}", func(w http.ResponseWriter, r *http.Request) {
 		taskIDStr := chi.URLParam(r, "id")
 		id, err := strconv.Atoi(taskIDStr)
