@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="static/css/style.css" rel="stylesheet">
+    <script src="static/js/htmx.min.js"></script>
+</head>
+
+<body>
+    <form hx-post="/task/add" hx-target="backlog-task" hx-trigger="submit">
+        <input type="text" name="task" value="">
+        <select name="priority">
+            <option value="NO_PRIORITY">--</option>
+            <option value="LOW">Low</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="HIGH">High</option>
+            <option value="URGENT">Urgent</option>
+        </select>
+
+        <select name="status">
+            <option value="BACKLOG">Backlog</option>
+            <option value="TODO">Todo</option>
+            <option value="DOING">Doing</option>
+            <option value="DONE">Done</option>
+        </select>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <div>
+        <h3>Backlog</h3>
+        <div id="backlog-task">
+            <div>backlog dummy</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Todo</h3>
+        <div id="todo-task">
+            <div>todo dummy</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Doing</h3>
+        <div id="doing-task">
+            <div>doing dummy</div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Done</h3>
+        <div id="done-task">
+            <div>done dummy</div>
+        </div>
+    </div>
+
+</body>
+
+</html>
