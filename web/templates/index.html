@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <form action="task/add" hx-post="task/add" hx-target="#backlog-task" hx-swap="beforeend" hx-on::after-request="if (event.detail.successful) this.reset()">
+    <form action="task/add" hx-post="task/add" hx-swap="none"
+        hx-on::after-request="if (event.detail.successful) this.reset()">
         <input type="text" name="description" value="">
         <select name="priority">
             <option value="NO_PRIORITY">--</option>
@@ -33,24 +34,36 @@
     <div>
         <h3>Backlog</h3>
         <div id="backlog-task">
+            {{ range .BacklogTasks }}
+            {{ template "task" . }}
+            {{ end }}
         </div>
     </div>
 
     <div>
         <h3>Todo</h3>
         <div id="todo-task">
+            {{ range .TodoTasks }}
+            {{ template "task" . }}
+            {{ end }}
         </div>
     </div>
 
     <div>
         <h3>Doing</h3>
         <div id="doing-task">
+            {{ range .DoingTasks }}
+            {{ template "task" . }}
+            {{ end }}
         </div>
     </div>
 
     <div>
         <h3>Done</h3>
         <div id="done-task">
+            {{ range .DoneTasks }}
+            {{ template "task" . }}
+            {{ end }}
         </div>
     </div>
 

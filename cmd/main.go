@@ -27,19 +27,40 @@ func main() {
 	fs := http.FileServer(http.Dir("web/static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
-	tmpl := template.Must(template.ParseFiles(
-		"web/templates/index.html",
-	))
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl.Execute(w, nil)
-	})
-
 	funcMap := template.FuncMap{
 		"ToLower": func(v TaskStatus) string {
 			return strings.ToLower(string(v))
 		},
 	}
-	taskAddTmpl := template.Must(template.New("task.html").Funcs(funcMap).ParseFiles(
+
+	tmpl := template.Must(template.New("index.html").Funcs(funcMap).ParseFiles(
+		"web/templates/index.html",
+		"web/templates/partials/task.html",
+	))
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		tasksByStatus := map[TaskStatus][]Task{}
+
+		for _, task := range taskList {
+			tasksByStatus[task.Status] = append(tasksByStatus[task.Status], task)
+		}
+
+		templateData := struct {
+			BacklogTasks []Task
+			TodoTasks    []Task
+			DoingTasks   []Task
+			DoneTasks    []Task
+		}{
+			BacklogTasks: tasksByStatus[BACKLOG],
+			TodoTasks:    tasksByStatus[TODO],
+			DoingTasks:   tasksByStatus[DOING],
+			DoneTasks:    tasksByStatus[DONE],
+		}
+
+		tmpl.Execute(w, templateData)
+	})
+
+	taskAddTmpl := template.Must(template.New("task_wrapper.html").Funcs(funcMap).ParseFiles(
+		"web/templates/partials/task_wrapper.html",
 		"web/templates/partials/task.html",
 	))
 
@@ -62,13 +83,12 @@ func main() {
 
 		taskList = append(taskList, task)
 
-        idSeq++
+		idSeq++
 		taskAddTmpl.Execute(w, task)
 	})
 
 	r.Delete("/task/delete/{id}", func(w http.ResponseWriter, r *http.Request) {
-		domID := chi.URLParam(r, "id")
-		taskIDStr := strings.TrimPrefix(domID, "task-")
+		taskIDStr := chi.URLParam(r, "id")
 		id, err := strconv.Atoi(taskIDStr)
 		if err != nil {
 			panic(err)
