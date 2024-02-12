@@ -1,0 +1,12 @@
+{{ block "task_item" . }}
+
+<div id="{{ .Status | ToLower }}-task" hx-swap-oob="beforeend">
+    <div id="{{.ID}}">
+        <div>ID: {{.ID}}</div>
+        <div>Description: {{.Description}}</div>
+        <div>Priority: {{.Priority}}</div>
+        <div>Status: {{.Status}}</div>
+    </div>
+</div>
+
+{{ end }}
