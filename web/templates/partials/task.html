@@ -1,11 +1,14 @@
 {{ block "task_item" . }}
 
 <div id="{{ .Status | ToLower }}-task" hx-swap-oob="beforeend">
-    <div id="{{.ID}}">
+    <div id="task-{{.ID}}">
         <div>ID: {{.ID}}</div>
         <div>Description: {{.Description}}</div>
         <div>Priority: {{.Priority}}</div>
         <div>Status: {{.Status}}</div>
+
+        <button type="button" hx-delete="/task/delete/{{.ID}}" hx-target="#task-{{.ID}}"
+            hx-swap="delete">Delete</button>
     </div>
 </div>
 

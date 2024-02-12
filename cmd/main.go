@@ -4,11 +4,15 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"slices"
+	"strconv"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
+
+var idSeq int = 1
 
 func main() {
 	r := chi.NewRouter()
@@ -49,21 +53,36 @@ func main() {
 		priority := TaskPriority(r.FormValue("priority"))
 		status := TaskStatus(r.FormValue("status"))
 
-		id := 1
-		if len(taskList) > 0 {
-			id = taskList[len(taskList)-1].ID + 1
-		}
-
 		task := Task{
-			ID:          id,
+			ID:          idSeq,
 			Description: description,
 			Priority:    priority,
 			Status:      status,
 		}
 
-        log.Println(task)
 		taskList = append(taskList, task)
+
+        idSeq++
 		taskAddTmpl.Execute(w, task)
+	})
+
+	r.Delete("/task/delete/{id}", func(w http.ResponseWriter, r *http.Request) {
+		domID := chi.URLParam(r, "id")
+		taskIDStr := strings.TrimPrefix(domID, "task-")
+		id, err := strconv.Atoi(taskIDStr)
+		if err != nil {
+			panic(err)
+		}
+
+		idx := slices.IndexFunc(taskList, func(t Task) bool {
+			return t.ID == id
+		})
+
+		if idx == -1 {
+			return
+		}
+
+		taskList = slices.Delete(taskList, idx, idx+1)
 	})
 
 	log.Println("Start server at port 8000")
