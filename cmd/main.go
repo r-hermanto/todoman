@@ -59,12 +59,12 @@ func main() {
 		tmpl.Execute(w, templateData)
 	})
 
-	taskAddTmpl := template.Must(template.New("task_wrapper.html").Funcs(funcMap).ParseFiles(
-		"web/templates/partials/task_wrapper.html",
+	taskAddTmpl := template.Must(template.New("task_add.html").Funcs(funcMap).ParseFiles(
+		"web/templates/partials/task_add.html",
 		"web/templates/partials/task.html",
 	))
 
-	r.Post("/task/add", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/task/update", func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
 			panic(err)
@@ -84,6 +84,37 @@ func main() {
 		taskList = append(taskList, task)
 
 		idSeq++
+		taskAddTmpl.Execute(w, task)
+	})
+
+	r.Post("/task/update", func(w http.ResponseWriter, r *http.Request) {
+		err := r.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
+		id, err := strconv.Atoi(r.FormValue("id"))
+		if err != nil {
+			panic(err)
+		}
+
+        idx := slices.IndexFunc(taskList, func(t Task) bool {
+			return t.ID == id
+		})
+
+        if idx == -1 {
+            return
+        }
+
+        task := taskList[idx]
+
+		description := r.FormValue("description")
+		priority := TaskPriority(r.FormValue("priority"))
+
+        task.Description = description
+        task.Priority = priority
+        taskList[idx] = task
+
 		taskAddTmpl.Execute(w, task)
 	})
 

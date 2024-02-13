@@ -10,8 +10,8 @@
 </head>
 
 <body>
-    <form action="task/add" hx-post="task/add" hx-swap="none"
-        hx-on::after-request="if (event.detail.successful) this.reset()">
+    <form hx-post="task/add" hx-swap="none" hx-on::after-request="if (event.detail.successful) this.reset()">
+        <input type="hidden" name="id" value="">
         <input type="text" name="description" value="">
         <select name="priority">
             <option value="NO_PRIORITY">--</option>
