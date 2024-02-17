@@ -98,22 +98,22 @@ func main() {
 			panic(err)
 		}
 
-        idx := slices.IndexFunc(taskList, func(t Task) bool {
+		idx := slices.IndexFunc(taskList, func(t Task) bool {
 			return t.ID == id
 		})
 
-        if idx == -1 {
-            return
-        }
+		if idx == -1 {
+			return
+		}
 
-        task := taskList[idx]
+		task := taskList[idx]
 
 		description := r.FormValue("description")
 		priority := TaskPriority(r.FormValue("priority"))
 
-        task.Description = description
-        task.Priority = priority
-        taskList[idx] = task
+		task.Description = description
+		task.Priority = priority
+		taskList[idx] = task
 
 		taskAddTmpl.Execute(w, task)
 	})
