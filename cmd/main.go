@@ -64,7 +64,7 @@ func main() {
 		"web/templates/partials/task.html",
 	))
 
-	r.Post("/task/update", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/task/add", func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
 			panic(err)

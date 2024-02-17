@@ -1,72 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <title></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="static/css/style.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="static/css/style.css" rel="stylesheet" />
     <script src="static/js/htmx.min.js"></script>
-</head>
+  </head>
 
-<body>
-    <form hx-post="task/add" hx-swap="none" hx-on::after-request="if (event.detail.successful) this.reset()">
-        <input type="hidden" name="id" value="">
-        <input type="text" name="description" value="">
-        <select name="priority">
-            <option value="NO_PRIORITY">--</option>
-            <option value="LOW">Low</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="HIGH">High</option>
-            <option value="URGENT">Urgent</option>
-        </select>
+  <body>
+    <form
+      hx-post="task/add"
+      hx-swap="none"
+      hx-on::after-request="if (event.detail.successful) this.reset()"
+    >
+      <input type="hidden" name="id" value="" />
+      <input type="text" name="description" value="" />
+      <select name="priority">
+        <option value="NO_PRIORITY">--</option>
+        <option value="LOW">Low</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="HIGH">High</option>
+        <option value="URGENT">Urgent</option>
+      </select>
 
-        <select name="status">
-            <option value="BACKLOG">Backlog</option>
-            <option value="TODO">Todo</option>
-            <option value="DOING">Doing</option>
-            <option value="DONE">Done</option>
-        </select>
+      <select name="status">
+        <option value="BACKLOG">Backlog</option>
+        <option value="TODO">Todo</option>
+        <option value="DOING">Doing</option>
+        <option value="DONE">Done</option>
+      </select>
 
-        <button type="submit">Save</button>
+      <button type="submit">Save</button>
     </form>
 
     <div>
-        <h3>Backlog</h3>
-        <div id="backlog-task">
-            {{ range .BacklogTasks }}
-            {{ template "task" . }}
-            {{ end }}
-        </div>
+      <h3>Backlog</h3>
+      <div id="backlog-task">
+        {{ range .BacklogTasks }} {{ template "task" . }} {{ end }}
+      </div>
     </div>
 
     <div>
-        <h3>Todo</h3>
-        <div id="todo-task">
-            {{ range .TodoTasks }}
-            {{ template "task" . }}
-            {{ end }}
-        </div>
+      <h3>Todo</h3>
+      <div id="todo-task">
+        {{ range .TodoTasks }} {{ template "task" . }} {{ end }}
+      </div>
     </div>
 
     <div>
-        <h3>Doing</h3>
-        <div id="doing-task">
-            {{ range .DoingTasks }}
-            {{ template "task" . }}
-            {{ end }}
-        </div>
+      <h3>Doing</h3>
+      <div id="doing-task">
+        {{ range .DoingTasks }} {{ template "task" . }} {{ end }}
+      </div>
     </div>
 
     <div>
-        <h3>Done</h3>
-        <div id="done-task">
-            {{ range .DoneTasks }}
-            {{ template "task" . }}
-            {{ end }}
-        </div>
+      <h3>Done</h3>
+      <div id="done-task">
+        {{ range .DoneTasks }} {{ template "task" . }} {{ end }}
+      </div>
     </div>
-
-</body>
-
+  </body>
 </html>
