@@ -63,7 +63,6 @@ func main() {
 		"web/templates/partials/task_add.html",
 		"web/templates/partials/task.html",
 	))
-
 	r.Post("/task/add", func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
@@ -87,6 +86,29 @@ func main() {
 		taskAddTmpl.Execute(w, task)
 	})
 
+	taskUpdateTmpl := template.Must(template.ParseFiles("web/templates/partials/task_update.html"))
+	r.Get("/task/update/{id}", func(w http.ResponseWriter, r *http.Request) {
+		taskIDStr := chi.URLParam(r, "id")
+		id, err := strconv.Atoi(taskIDStr)
+		if err != nil {
+			panic(err)
+		}
+
+		idx := slices.IndexFunc(taskList, func(t Task) bool {
+			return t.ID == id
+		})
+
+		if idx == -1 {
+			return
+		}
+
+		task := taskList[idx]
+		taskUpdateTmpl.Execute(w, task)
+	})
+
+	taskUpdatePostTmpl := template.Must(template.ParseFiles(
+		"web/templates/partials/task.html",
+	))
 	r.Post("/task/update", func(w http.ResponseWriter, r *http.Request) {
 		err := r.ParseForm()
 		if err != nil {
@@ -115,7 +137,7 @@ func main() {
 		task.Priority = priority
 		taskList[idx] = task
 
-		taskAddTmpl.Execute(w, task)
+		taskUpdatePostTmpl.Execute(w, task)
 	})
 
 	r.Post("/task/status/{id}", func(w http.ResponseWriter, r *http.Request) {

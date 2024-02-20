@@ -1,4 +1,4 @@
-{{ define "task" }}
+{{ block "task" . }}
 
 <div id="task-{{.ID}}">
   <div>ID: {{.ID}}</div>
@@ -14,45 +14,34 @@
     hx-swap="delete"
   >
     <!-- prettier-ignore -->
-    <option
-      value="BACKLOG"
-      {{ if eq .Status "BACKLOG" }}
-      selected="selected"
-      {{ end }}
-    >
+    <option value="BACKLOG" {{ if eq .Status `BACKLOG` }} selected="selected" {{ end }}>
       Backlog
     </option>
 
     <!-- prettier-ignore -->
-    <option
-      value="TODO"
-      {{ if eq .Status "TODO" }}
-      selected="selected"
-      {{ end }}
-    >
+    <option value="TODO" {{ if eq .Status `TODO` }} selected="selected" {{ end }}>
       Todo
     </option>
 
     <!-- prettier-ignore -->
-    <option
-      value="DOING"
-      {{ if eq .Status "DOING" }}
-      selected="selected"
-      {{ end }}
-    >
+    <option value="DOING" {{ if eq .Status `DOING` }} selected="selected" {{ end }}>
       Doing
     </option>
 
     <!-- prettier-ignore -->
-    <option
-      value="DONE"
-      {{ if eq .Status "DONE" }}
-      selected="selected"
-      {{ end }}
-    >
+    <option value="DONE" {{ if eq .Status `DONE` }} selected="selected" {{ end }}>
       Done
     </option>
   </select>
+
+  <button
+    type="button"
+    hx-get="/task/update/{{.ID}}"
+    hx-target="#task-{{.ID}}"
+    hx-swap="innerHTML"
+  >
+    Edit
+  </button>
 
   <button
     type="button"

@@ -1,0 +1,32 @@
+<form hx-post="task/update" hx-swap="outerHTML" hx-target="#task-{{.ID}}">
+  <input type="hidden" name="id" value="{{.ID}}" />
+  <input type="text" name="description" value="{{.Description}}" />
+  <select name="priority">
+    <!-- prettier-ignore -->
+    <option value="NO_PRIORITY" {{ if eq .Priority `NO_PRIORITY` }} selected="selected" {{ end }}>
+      --
+    </option>
+
+    <!-- prettier-ignore -->
+    <option value="LOW" {{ if eq .Priority `LOW` }} selected="selected" {{ end }}>
+      Low
+    </option>
+
+    <!-- prettier-ignore -->
+    <option value="MEDIUM" {{ if eq .Priority `MEDIUM` }} selected="selected" {{ end }}>
+      Medium
+    </option>
+
+    <!-- prettier-ignore -->
+    <option value="HIGH" {{ if eq .Priority `HIGH` }} selected="selected" {{ end }}>
+      High
+    </option>
+
+    <!-- prettier-ignore -->
+    <option value="URGENT" {{ if eq .Priority `URGENT` }} selected="selected" {{ end }}>
+      Urgent
+    </option>
+  </select>
+
+  <button type="submit">Update</button>
+</form>
